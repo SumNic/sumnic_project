@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { Profile } from './profile-users.model';
 import { User } from './users.model';
 
@@ -20,7 +21,7 @@ export class UsersService {
         const profile = await this.profileRepository.create(dto);
         await user.$set('profile', [profile.id]);
         user.profile = [profile];
-        const role = await this.roleService.getRoleByValue("USER");
+        const role = await this.roleService.getRoleByValue("ADMIN");
         await user.$set('roles', [role.id]);
         user.roles = [role];
         return user;
@@ -36,14 +37,9 @@ export class UsersService {
         return user;
     }
 
-    // async updateUser(dto: CreateUserDto) {
-    //     const user = await this.userRepository.update(dto);
-    //     const profile = await this.profileRepository.create(dto);
-    //     await user.$set('profile', [profile.id]);
-    //     user.profile = [profile];
-    //     const role = await this.roleService.getRoleByValue("USER");
-    //     await user.$set('roles', [role.id]);
-    //     user.roles = [role];
-    //     return user;
-    // }
+    async updateUser(id: number, dto: UpdateUserDto) {
+        const user = await this.userRepository.update({...dto }, {where: {id}} )
+        const profile = await this.profileRepository.update({...dto }, {where: {id}});
+        return user;
+    }
 }

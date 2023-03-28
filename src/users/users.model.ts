@@ -23,6 +23,6 @@ export class User extends Model<User, UserCreationAttrs> {
     @BelongsToMany(() => Role, () => UserRoles)
     roles: Role[];
 
-    @HasOne(() => Profile)
+    @HasOne(() => Profile) 
     profile: Profile[];
 }
