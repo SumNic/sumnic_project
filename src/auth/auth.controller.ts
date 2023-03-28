@@ -22,10 +22,10 @@ export class AuthController {
         return this.authService.registration(userDto);
     }
 
-    // @Roles('ADMIN')
-    // @UseGuards(RolesGuard)
-    // @Put('/update/:id')
-    // update(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
-    //     return this.authService.updation(id, userDto);
-    // }
+    @Roles('ADMIN')
+    @UseGuards(RolesGuard)
+    @Put('/update/:id')
+    update(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
+        return this.authService.updation(id, userDto);
+    }
 }

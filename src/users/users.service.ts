@@ -24,7 +24,7 @@ export class UsersService {
         const profile = await this.profileRepository.create(dto);
         await user.$set('profile', [profile.id]);
         user.profile = [profile];
-        const role = await this.roleService.getRoleByValue("ADMIN");
+        const role = await this.roleService.getRoleByValue("USER");
         await user.$set('roles', [role.id]);
         user.roles = [role];
         return user;
@@ -40,32 +40,18 @@ export class UsersService {
         return user;
     }
 
-    async updateUser(editDto: UpdateUserDto) {
-        // const candidate = await this.getUserByEmail(dto.email);
-        // if(candidate) {
-        //     throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
-        // }
-        const user = await this.userRepository.findByPk(editDto.id);
-        const profile = await this.profileRepository.findByPk(editDto.id);
-        // const role = await this.roleService.getRoleByValue();
-        await user.update({...editDto})
+    async updateUser(id: number, editDto: UpdateUserDto) {
+        const candidate = await this.getUserByEmail(editDto.email);
+        // Проверка, чтобы меняемый email не совпадал с email уже существующих пользователей,
+        // то есть этот email может быть только у редактируемого пользователя
+        if(candidate.id !== +id) {
+            throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST);
+        }
+        const user = await this.userRepository.findByPk(id);
+        const profile = await this.profileRepository.findByPk(id);
+        const hashPassword = await bcrypt.hash(editDto.password, 5);
+        await user.update({...editDto, password: hashPassword});
+        await profile.update({...editDto});
         return editDto;
-        // const user = await this.userRepository.update({...dto}, {where: {id}});
-        // const profile = await this.profileRepository.update({...dto }, {where: {id}});
-        // await user.$get('profile', [profile.id]);
-        // user.profile = [profile];
-        // const role = await this.roleService.getRoleByValue("ADMIN");
-        // await user.$set('roles', [role.id]);
-        // user.roles = [role];
-        // return user;
-        // const payload = {email: user.email, id: user.id, roles: user.roles};
-
-        // console.log(payload)
-        // return this.authService.generateToken(user);
-        // return this.authService.generateToken(user);
-
-        // const user = await this.userRepository.update({...dto }, {where: {id}} )
-        // const profile = await this.profileRepository.update({...dto }, {where: {id}});
-        // return user;
     }
 }

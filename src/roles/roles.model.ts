@@ -2,7 +2,6 @@ import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescr
 import { User } from "src/users/users.model";
 import { UserRoles } from "./user-roles.model";
 
-// generic - показывает какие поля нам нужны для создания класса, остальные поля для создания класса не нужны
 interface RoleCreationAttrs {
     value: string;
     description: string;

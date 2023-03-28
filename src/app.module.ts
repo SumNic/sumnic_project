@@ -6,7 +6,7 @@ import { RolesModule } from './roles/roles.module';
 import { Role } from './roles/roles.model';
 import { UserRoles } from './roles/user-roles.model';
 import { AuthModule } from './auth/auth.module';
-import { ProfileModule } from './profile/profile.module';
+// import { ProfileModule } from './profile/profile.module';
 import { User } from './users/users.model';
 import { Profile } from './users/profile-users.model';
 
@@ -29,7 +29,7 @@ import { Profile } from './users/profile-users.model';
     UsersModule,
     RolesModule,
     AuthModule,
-    ProfileModule,
+    
   ],
   controllers: [],
   providers: [],
