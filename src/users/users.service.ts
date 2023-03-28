@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RolesService } from 'src/roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Profile } from './profile-users.model';
 import { User } from './users.model';
+import * as bcrypt from 'bcryptjs'; 
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +16,7 @@ export class UsersService {
 
     constructor(@InjectModel(User) private userRepository: typeof User,
     private roleService: RolesService,
+    // private authService: AuthService,
     @InjectModel(Profile) private profileRepository: typeof Profile) {}
 
     async createUser(dto: CreateUserDto) {
@@ -27,7 +30,7 @@ export class UsersService {
         return user;
     }
 
-    async getAllUsers() {
+    async getAllUsers() { 
         const users = await this.userRepository.findAll({include: {all: true}});
         return users;
     } 
@@ -37,9 +40,32 @@ export class UsersService {
         return user;
     }
 
-    async updateUser(id: number, dto: UpdateUserDto) {
-        const user = await this.userRepository.update({...dto }, {where: {id}} )
-        const profile = await this.profileRepository.update({...dto }, {where: {id}});
-        return user;
+    async updateUser(editDto: UpdateUserDto) {
+        // const candidate = await this.getUserByEmail(dto.email);
+        // if(candidate) {
+        //     throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
+        // }
+        const user = await this.userRepository.findByPk(editDto.id);
+        const profile = await this.profileRepository.findByPk(editDto.id);
+        // const role = await this.roleService.getRoleByValue();
+        await user.update({...editDto})
+        return editDto;
+        // const user = await this.userRepository.update({...dto}, {where: {id}});
+        // const profile = await this.profileRepository.update({...dto }, {where: {id}});
+        // await user.$get('profile', [profile.id]);
+        // user.profile = [profile];
+        // const role = await this.roleService.getRoleByValue("ADMIN");
+        // await user.$set('roles', [role.id]);
+        // user.roles = [role];
+        // return user;
+        // const payload = {email: user.email, id: user.id, roles: user.roles};
+
+        // console.log(payload)
+        // return this.authService.generateToken(user);
+        // return this.authService.generateToken(user);
+
+        // const user = await this.userRepository.update({...dto }, {where: {id}} )
+        // const profile = await this.profileRepository.update({...dto }, {where: {id}});
+        // return user;
     }
 }
