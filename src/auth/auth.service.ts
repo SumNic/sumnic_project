@@ -26,16 +26,6 @@ export class AuthService {
         return this.generateToken(user);
     }
 
-    async updation(id: string, userDto: CreateUserDto) {
-        const candidate = await this.userService.getUserByEmail(userDto.email);
-        if(candidate.id !== +id) {
-            throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
-        }
-        const hashPassword = await bcrypt.hash(userDto.password, 5);
-        const user = await this.userService.createUser({...userDto, password: hashPassword});
-        return this.generateToken(user);
-    }
-
     private async generateToken(user: User) { 
         const payload = {email: user.email, id: user.id, roles: user.roles};
         return {

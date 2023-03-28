@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -11,11 +11,6 @@ export class UsersController {
 
     constructor(private userService: UsersService) {}
 
-    @Post()
-    create(@Body() userDto: CreateUserDto) {
-        return this.userService.createUser(userDto);
-    }
-
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Get()
@@ -25,17 +20,27 @@ export class UsersController {
 
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
     @Put('/update/:id')
     update(@Param('id') id: number, @Body() editDto: UpdateUserDto) {
         return this.userService.updateUser(id, editDto);
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Put('/update')
+    updateSelf(@Req() req: any, @Body() editDto: UpdateUserDto) {
+        return this.userService.updateOneUser(req, editDto);
+    }
+
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
-    @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     remove(@Param('id') id: number) {
-    return this.userService.remove(+id);
-  }
+    return this.userService.removeUser(+id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('/delete')
+    removeSelf(@Req() req: any) {
+    return this.userService.removeOneUser(req);
+    }
 }
