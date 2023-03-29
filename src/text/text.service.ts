@@ -27,7 +27,7 @@ export class TextService {
         // Сохраним текст в базу данных
         // createFile - возвращает название файла
         const fileName = await this.fileService.createFile(image); 
-        const text = await this.textRepository.create({...dto, userId: id, image: fileName})
+        const text = await this.textRepository.create({...dto, userId: id, image: fileName});
         return text;
     }
     
@@ -39,10 +39,35 @@ export class TextService {
         if(candidate && candidate.id !== +id) {
             throw new HttpException('Необходимо указать уникальное название', HttpStatus.BAD_REQUEST);
         }
-        // Сохраним текст в базу данных
-        // createFile - возвращает название файла
-        const fileName = await this.fileService.createFile(image); 
-        await text.update({...dto, userId: userId, image: fileName})
+        // Проверяем, есть ли в запросе файл
+        if(image) {
+            // Удалить текущий файл с сервера
+            await this.fileService.deleteFile(text.image);
+            // Сохраним текст в базу данных
+            // createFile - возвращает название файла
+            const fileName = await this.fileService.createFile(image); 
+            await text.update({...dto, userId: userId, image: fileName});
+        } else {
+            await text.update({...dto, userId: userId});
+        }
+        
+        return text;
+    }
+
+    async deleteOne(id: number) {
+        const text = await this.textRepository.findByPk(id);
+        // Проверка уникальности названия
+        if(!text) {
+            throw new HttpException('Указанный текстовый блок не существует', HttpStatus.BAD_REQUEST);
+        }
+        // Проверяем, есть ли на сервере файл, относящийся к этому блоку
+        if(text.image) {
+            // Удалить текущий файл с сервера
+            await this.fileService.deleteFile(text.image);
+        }
+        
+        // Удаляем текстовый блок из базы данных
+        await text.destroy();
         return text;
     }
 
