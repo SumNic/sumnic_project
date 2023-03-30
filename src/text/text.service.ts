@@ -47,7 +47,7 @@ export class TextService {
         // Проверяем, есть ли в запросе файл, который необходимо изменить
         if(image) {
             // Если есть, то меняем текущий файл на сервере на новый
-            await this.fileService.updateFile(text.essenceTable, text.id, image); 
+            await this.fileService.updateFile(text.essenceTable, text.id, image);  
         } 
         // Перезаписываем текстовый блок в базу данных
         await text.update({...dto, userId: userId}); 
