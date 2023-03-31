@@ -11,8 +11,7 @@ export class TextService {
 
     // Заинжектим модель
     constructor(@InjectModel(Text) private textRepository: typeof Text,
-    private fileService: FilesService,
-    // private filesRepository: typeof Files
+    private fileService: FilesService
     ) {}
 
     // Проверка title на уникальность
