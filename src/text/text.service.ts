@@ -56,7 +56,6 @@ export class TextService {
 
     async deleteOne(id: number) {
         const text = await this.textRepository.findByPk(id);
-        console.log(text.essenceTable)
         // Проверяем, существует ли запись с указанным id 
         if(!text) {
             throw new HttpException('Указанный текстовый блок не существует', HttpStatus.BAD_REQUEST);
@@ -72,8 +71,6 @@ export class TextService {
     async getTextName(uniq_title: string) {
         const text = await this.textRepository.findOne({where: {uniq_title}, include: {all: true}});
         const files = await this.fileService.getFile(text.id, text.essenceTable);
-        console.log(text)
-        console.log(files)
         return [text, files];
     }
 
