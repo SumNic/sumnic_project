@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Roles } from 'src/auth/roles-auth.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { CreateTextDto } from './dto/create-text.dto';
@@ -33,7 +34,7 @@ export class TextController {
                 @Body() dto: CreateTextDto,
                 @UploadedFile() image) {
 
-        return this.textService.updateOne(id, req, dto, image);
+        return this.textService.update(id, req, dto, image);
     }
 
     // Удаление текстового блока и файла с сервера
@@ -47,17 +48,16 @@ export class TextController {
         return this.textService.deleteOne(id);
     }
 
-    // Получение всего списка
-    @Get('/get')
-    // UseInterceptors - декоратор для работы с файлами
-    @UseInterceptors(FileInterceptor('image'))
-    getText(@Param('id') id: number, 
-                @Req() req: any, 
-                @Body() dto: CreateTextDto,
-                @UploadedFile() image) {
-
-        return this.textService.updateOne(id, req, dto, image);
+    // Получение текстового блока по уникальному названию
+    @Get('get/:title')
+    getTextTitle(@Param('title') title: string) {
+        console.log(title)
+        return this.textService.getTextName(title);
     }
 
-
+    // Получение всего списка
+    @Get('/get')
+    getAll() {
+        return this.textService.getAllText();
+    }
 }

@@ -6,12 +6,13 @@ import { User } from 'src/users/users.model';
 import { Text } from './text.model';
 import { FilesModule } from 'src/files/files.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { Files } from 'src/files/files.model';
 
 @Module({
   providers: [TextService],
   controllers: [TextController],
   imports: [
-    SequelizeModule.forFeature([User, Text]),
+    SequelizeModule.forFeature([User, Text, Files]),
     FilesModule,
     AuthModule
   ]

@@ -4,4 +4,6 @@ export class CreateTextDto {
     readonly content: string;
     readonly image: string;
     readonly grup: string;
+    readonly essenceTable: string;
+    // readonly essenceId: number;
 }

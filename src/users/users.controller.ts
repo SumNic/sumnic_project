@@ -11,6 +11,7 @@ export class UsersController {
 
     constructor(private userService: UsersService) {}
 
+    // Получение всех пользователей
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Get()
@@ -18,6 +19,7 @@ export class UsersController {
         return this.userService.getAllUsers();
     }
 
+    // Редактирование пользователя по id - допуск ADMIN
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Put('/update/:id')
@@ -25,12 +27,14 @@ export class UsersController {
         return this.userService.updateUser(id, editDto);
     }
 
+    // Редактирование своего профиля
     @UseGuards(JwtAuthGuard)
     @Put('/update')
     updateSelf(@Req() req: any, @Body() editDto: UpdateUserDto) {
         return this.userService.updateOneUser(req, editDto);
     }
 
+    // Удаление пользователя ADMIN-ом
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Delete('/delete/:id')
@@ -38,6 +42,7 @@ export class UsersController {
     return this.userService.removeUser(+id);
     }
 
+    // Удаление своей страницы
     @UseGuards(JwtAuthGuard)
     @Delete('/delete')
     removeSelf(@Req() req: any) {

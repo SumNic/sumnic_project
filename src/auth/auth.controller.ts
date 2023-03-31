@@ -21,11 +21,4 @@ export class AuthController {
     registration(@Body() userDto: CreateUserDto) {
         return this.authService.registration(userDto);
     }
-
-    // @Roles('ADMIN')
-    // @UseGuards(RolesGuard)
-    // @Put('/update/:id')
-    // update(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
-    //     return this.authService.updation(id, userDto);
-    // }
 }
