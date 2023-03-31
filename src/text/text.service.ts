@@ -4,7 +4,7 @@ import { Files } from 'src/files/files.model';
 import { FilesService } from 'src/files/files.service';
 import { locales } from 'validator/lib/isIBAN';
 import { CreateTextDto } from './dto/create-text.dto';
-import { Text } from './text.model';
+import { Text } from './text.model'; 
 
 @Injectable()
 export class TextService {
