@@ -23,7 +23,7 @@ export class TextController {
         return this.textService.create(req, dto, image);
     }
 
-    // Редактирование текстового блока и файла с сервера
+    // Редактирование текстового блока и файла на сервере
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
     @Put('/update/:id')

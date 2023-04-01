@@ -1,5 +1,6 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
 import { User } from "src/auth/auth.model";
+import { Text } from 'src/text/text.model';
 
 // generic - показывает какие поля нам нужны для создания класса, остальные поля для создания класса не нужны
 interface ProfileCreationAttrs {
@@ -25,10 +26,13 @@ export class Profile extends Model<Profile, ProfileCreationAttrs> {
     @Column({type: DataType.STRING, defaultValue: 'profile'})
     essenceTable: string;
 
-    @BelongsTo(() => User)
-    user: User;
+    // @HasMany(() => Text) 
+    // text: Text[];
 
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER})
-    userId: number; 
+    userId: number;
+    
+    @BelongsTo(() => User)
+    user: User;
 }

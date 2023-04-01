@@ -13,7 +13,6 @@ export class FilesService {
 
     async createFile(dto: CreateFileDto, image: any, essenceId: number, essenceTable: string) {
         try {
-            console.log(essenceId)
             const fileName = uuid.v4() + '.jpg';
             const filePath = path.resolve(__dirname, '..','static');
             if(!fs.existsSync(filePath)) {
@@ -43,6 +42,7 @@ export class FilesService {
     async deleteFile(Table: string, id: number) {
         try {
             const files = await this.filesRepository.findOne({ where: { essenceTable: Table, essenceId: id}, include: {all: true} });
+            console.log(files)
             const fileName = files.image;
             const filePath = path.resolve(__dirname, '..','static');
             // Удаление файла с сервера
@@ -69,6 +69,27 @@ export class FilesService {
             return files;
         } catch (e) {
             throw new HttpException('Произошла ошибка при поиске файла', HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    async deleteUnwantedFiles() {
+        try {
+            const files = await this.filesRepository.findAll({ where: { essenceTable: null, essenceId: null}, include: {all: true} });
+            const date = new Date();
+            files.map((files) => {
+                const timeDifference = (+date - +files.createdAt) / 1000 / 60;
+                if (timeDifference > 60) {
+                    const fileName = files.image;
+                    const filePath = path.resolve(__dirname, '..','static');
+                    // Удаление файла с сервера
+                    fs.unlinkSync(path.join(filePath, fileName));
+                    // Удаление файла из базы данных
+                    files.destroy();
+                }
+            })
+            return "Ok!";
+        } catch (e) {
+            throw new HttpException('Произошла ошибка при удалении файла', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }

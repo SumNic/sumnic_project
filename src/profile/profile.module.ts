@@ -11,12 +11,13 @@ import { User } from 'src/auth/auth.model';
 import { Files } from 'src/files/files.model';
 import { FilesModule } from 'src/files/files.module';
 import { AuthService } from 'src/auth/auth.service';
+import { Text } from 'src/text/text.model';
 
 @Module({
   controllers: [ProfileController],
   providers: [ProfileService],
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRoles, Profile, Files]),
+    SequelizeModule.forFeature([User, Role, UserRoles, Profile, Files, Text]),
     RolesModule,
     // AuthModule,
     forwardRef(() => AuthModule),

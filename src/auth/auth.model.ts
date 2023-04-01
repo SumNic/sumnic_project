@@ -26,7 +26,4 @@ export class User extends Model<User, UserCreationAttrs> {
 
     @HasOne(() => Profile) 
     profile: Profile[];
-
-    @HasMany(() => Text) 
-    text: Text[];
 }

@@ -30,7 +30,6 @@ export class ProfileService {
     async createUser(dto: CreateProfileDto, image: any) {
         // Регистрация с помощью блока auth и создаем User
         const user_auth = await this.authService.registration(dto);
-        console.log(user_auth.id)
         const user = await this.userRepository.findByPk(user_auth.id);
         // Создаем профиль
         const profile = await this.profileRepository.create(dto);
@@ -41,8 +40,6 @@ export class ProfileService {
         const role = await this.roleService.getRoleByValue("ADMIN");
         await user.$set('roles', [role.id]);
         user.roles = [role];
-        
-        // await profile.$set('files', [files.id]);
         return this.getOneUsers(user.email);
     }
 
@@ -100,6 +97,9 @@ export class ProfileService {
             throw new HttpException('Указанный пользователь не существует', HttpStatus.BAD_REQUEST);
         }
         const profile = await this.profileRepository.findByPk(id);
+        // Удалить текущий файл с сервера и базы данных
+        await this.fileService.deleteFile(profile.essenceTable, id);
+        // Удаляем пользователя из таблицы users и profile
         await user.destroy();
         await profile.destroy();
         return 'Пользователь успешно уделён!';
@@ -112,6 +112,10 @@ export class ProfileService {
             throw new HttpException('Указанный пользователь не существует', HttpStatus.BAD_REQUEST);
         }
         const profile = await this.profileRepository.findByPk(id);
+        console.log(profile.essenceTable)
+        console.log(id)
+        await this.fileService.deleteFile(profile.essenceTable, id);
+        // Удаляем пользователя из таблицы users и profile
         await user.destroy();
         await profile.destroy();
         return 'Ваша страница удалена!';
