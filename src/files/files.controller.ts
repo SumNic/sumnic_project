@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FilesService } from './files.service';
@@ -19,19 +19,13 @@ export class FilesController {
         return this.fileService.createFile(dto, image, essenceId, essenceTable);
     }
 
-    // // Редактирование текстового блока и файла с сервера
-    // @Roles('ADMIN')
-    // @UseGuards(RolesGuard)
-    // @Put('/update/:id')
-    // // UseInterceptors - декоратор для работы с файлами
-    // @UseInterceptors(FileInterceptor('image'))
-    // updateText(@Param('id') id: number, 
-    //             @Req() req: any, 
-    //             @Body() dto: CreateTextDto,
-    //             @UploadedFile() image) {
-
-    //     return this.textService.updateOne(id, req, dto, image);
-    // }
+    // // Удаление всех лишних файлов
+    @Delete('/delete')
+    // UseInterceptors - декоратор для работы с файлами
+    @UseInterceptors(FileInterceptor('image'))
+    deleteUnwantedFiles() {
+        return this.fileService.deleteUnwantedFiles();
+    }
 
     // // Удаление текстового блока и файла с сервера
     // @Roles('ADMIN')
