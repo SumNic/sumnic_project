@@ -28,4 +28,4 @@ import { Files } from 'src/files/files.model';
     JwtModule
   ]
 })
-export class AuthModule {}
+export class AuthModule {} 

@@ -25,7 +25,7 @@ export class ProfileController {
     login(@Body() dto: CreateProfileDto) {
         return this.authService.login(dto);
     }
-
+    
     // Получение всех пользователей
     @Roles('ADMIN')
     @UseGuards(RolesGuard)
