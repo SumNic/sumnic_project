@@ -14,9 +14,9 @@ export class FilesController {
     @Post()
     // UseInterceptors - декоратор для работы с файлами
     @UseInterceptors(FileInterceptor('image'))
-    createFile(@Body() dto: CreateFileDto, @UploadedFile() image, essenceId: number) {
+    createFile(@Body() dto: CreateFileDto, @UploadedFile() image, essenceId: number, essenceTable: string) {
 
-        return this.fileService.createFile(dto, image, essenceId);
+        return this.fileService.createFile(dto, image, essenceId, essenceTable);
     }
 
     // // Редактирование текстового блока и файла с сервера

@@ -22,6 +22,7 @@ export class TextService {
 
     // Создание текстового блока
     async create(req: any, dto: CreateTextDto, image: any) {
+        // Из обертки @UseGuards получаем req, из которого извлекаем id автора текстового сообщения
         const id = req.user.id;
         const candidate = await this.getTextByUniqTitle(dto.uniq_title);
         // Проверка уникальности названия
@@ -32,7 +33,7 @@ export class TextService {
         // Сохраним текстовый блок в базу данных
         const text = await this.textRepository.create({...dto, userId: id});
         // Сохраняем файл в базе данных и на сервере
-        await this.fileService.createFile(dto, image, text.id);
+        await this.fileService.createFile(dto, image, text.id, text.essenceTable);
         return text;
     }
     

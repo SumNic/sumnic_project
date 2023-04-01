@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TextService } from './text.service';
 import { TextController } from './text.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from 'src/users/users.model';
 import { Text } from './text.model';
 import { FilesModule } from 'src/files/files.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { Files } from 'src/files/files.model';
+import { User } from 'src/auth/auth.model';
 
 @Module({
   providers: [TextService],

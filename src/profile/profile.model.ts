@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { User } from "./users.model";
+import { User } from "src/auth/auth.model";
 
 // generic - показывает какие поля нам нужны для создания класса, остальные поля для создания класса не нужны
 interface ProfileCreationAttrs {
@@ -21,6 +21,9 @@ export class Profile extends Model<Profile, ProfileCreationAttrs> {
 
     @Column({type: DataType.INTEGER, allowNull: false})
     phone: number;
+
+    @Column({type: DataType.STRING, defaultValue: 'profile'})
+    essenceTable: string;
 
     @BelongsTo(() => User)
     user: User;

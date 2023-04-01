@@ -1,5 +1,5 @@
 import { BelongsToMany, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { User } from "src/users/users.model";
+import { User } from "src/auth/auth.model";
 import { Role } from "./roles.model";
 
 @Table({tableName: 'user_roles', createdAt: false, updatedAt: false})

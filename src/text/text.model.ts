@@ -1,6 +1,5 @@
 import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, HasOne, Model, Table } from "sequelize-typescript";
-import { Files } from "src/files/files.model";
-import { User } from "src/users/users.model";
+import { User } from "src/auth/auth.model";
 
 // generic - показывает какие поля нам нужны для создания класса, остальные поля для создания класса не нужны
 interface TextCreationAttrs {
@@ -29,7 +28,7 @@ export class Text extends Model<Text, TextCreationAttrs> {
     @Column({type: DataType.STRING, allowNull: false})
     grup: string;
 
-    @Column({type: DataType.STRING})
+    @Column({type: DataType.STRING, defaultValue: 'text'})
     essenceTable: string;
 
     @ForeignKey(() => User)
@@ -38,8 +37,4 @@ export class Text extends Model<Text, TextCreationAttrs> {
 
     @BelongsTo(() => User) 
     author: User;
-
-    @HasOne(() => Files) 
-    files: Files[];
-    
 }

@@ -11,8 +11,9 @@ export class FilesService {
 
     constructor(@InjectModel(Files) private filesRepository: typeof Files) {}
 
-    async createFile(dto: CreateFileDto, image: any, essenceId: number) {
+    async createFile(dto: CreateFileDto, image: any, essenceId: number, essenceTable: string) {
         try {
+            console.log(essenceId)
             const fileName = uuid.v4() + '.jpg';
             const filePath = path.resolve(__dirname, '..','static');
             if(!fs.existsSync(filePath)) {
@@ -20,7 +21,7 @@ export class FilesService {
                 fs.mkdirSync(filePath, {recursive: true});
             }
             fs.writeFileSync(path.join(filePath, fileName), image.buffer);
-            const files = await this.filesRepository.create({...dto, image: fileName, essenceId});
+            const files = await this.filesRepository.create({...dto, image: fileName, essenceId, essenceTable});
             return files;
         } catch (e) {
             throw new HttpException('Произошла ошибка при записи файла', HttpStatus.INTERNAL_SERVER_ERROR)
