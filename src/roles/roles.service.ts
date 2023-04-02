@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from 'src/auth/auth.model';
 import { AddRoleDto } from './dto/add-role.dto';
@@ -9,10 +8,9 @@ import { Role } from './roles.model';
 @Injectable()
 export class RolesService {
 
-    constructor(@InjectModel(Role) private roleRepository: typeof Role,
-    @InjectModel(User)  
-    private userRepository: typeof User,
-    // private jwtService: JwtService,
+    constructor(
+        @InjectModel(Role) private roleRepository: typeof Role,
+        @InjectModel(User) private userRepository: typeof User,
     ) {}
 
     async createRole(dto: CreateRoleDto) {

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ProfileModule } from './profile/profile.module';
@@ -41,10 +40,6 @@ import { Files } from './files/files.model';
     AuthModule,
     TextModule,
     FilesModule,
-    // DevtoolsModule.register({
-    //   http: process.env.NODE_ENV !== 'production',
-    // }),
-    
   ],
   controllers: [],
   providers: [],

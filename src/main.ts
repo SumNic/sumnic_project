@@ -1,6 +1,5 @@
-import { NestFactory, PartialGraphHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as fs from 'fs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -16,18 +15,9 @@ async function bootstrap() {
       .addTag('sumnic')
       .build()
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/api/docs', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   await app.listen(PORT, () => console.log(PORT));
 }
 
-
-
-
-
 bootstrap();
-
-// bootstrap().catch((err) => {
-//   fs.writeFileSync('graph.json', PartialGraphHost.toString() ?? '');
-//   process.exit(1);
-// });

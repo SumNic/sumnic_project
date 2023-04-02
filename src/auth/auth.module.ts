@@ -7,10 +7,8 @@ import { UserRoles } from 'src/roles/user-roles.model';
 import { AuthService } from './auth.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './auth.model';
-import { Files } from 'src/files/files.model';
 
 @Module({
-  // controllers: [AuthController],
   providers: [AuthService],
   imports: [
     SequelizeModule.forFeature([User, Role, UserRoles, Profile]),
@@ -28,4 +26,4 @@ import { Files } from 'src/files/files.model';
     JwtModule
   ]
 })
-export class AuthModule {} 
+export class AuthModule {}

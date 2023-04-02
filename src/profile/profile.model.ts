@@ -1,6 +1,6 @@
-import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import { ApiProperty } from "@nestjs/swagger";
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
 import { User } from "src/auth/auth.model";
-import { Text } from 'src/text/text.model';
 
 // generic - показывает какие поля нам нужны для создания класса, остальные поля для создания класса не нужны
 interface ProfileCreationAttrs {
@@ -11,23 +11,24 @@ interface ProfileCreationAttrs {
 
 @Table({tableName: 'profile'})
 export class Profile extends Model<Profile, ProfileCreationAttrs> {
+    @ApiProperty({example: '1', description: 'Уникальный идентификатор'})
     @Column({type: DataType.INTEGER, unique: true, autoIncrement: true, primaryKey: true})
     id: number;
-
+    
+    @ApiProperty({example: 'Имя', description: 'Имя пользователя'})
     @Column({type: DataType.STRING, allowNull: false})
     first_name: string;
-
+    
+    @ApiProperty({example: 'Фамилия', description: 'Фамилия пользователя'})
     @Column({type: DataType.STRING, allowNull: false})
     last_name: string;
-
+    
+    @ApiProperty({example: '7-987-123-45-67', description: 'Телефон пользователя'})
     @Column({type: DataType.INTEGER, allowNull: false})
     phone: number;
 
     @Column({type: DataType.STRING, defaultValue: 'profile'})
     essenceTable: string;
-
-    // @HasMany(() => Text) 
-    // text: Text[];
 
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER})

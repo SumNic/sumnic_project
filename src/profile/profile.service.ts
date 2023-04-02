@@ -5,26 +5,20 @@ import { CreateProfileDto } from './dto/create-profil.dto';
 import { Profile } from './profile.model';
 import * as bcrypt from 'bcryptjs'; 
 import { AuthService } from 'src/auth/auth.service';
-import { JwtService } from "@nestjs/jwt";
 import { User } from 'src/auth/auth.model';
-import { Files } from 'src/files/files.model';
 import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class ProfileService {
 
     constructor(
-        @InjectModel(Profile) private profileRepository: typeof Profile,
-                        private fileService: FilesService,
-                        // private profileService: ProfileService,
-                @InjectModel(User) 
-                        private userRepository: typeof User,
-                        private authService: AuthService,
-                        private roleService: RolesService,
-                        private jwtService: JwtService,
-
-                // @InjectModel(Files) private filesRepository: typeof Files,
-                        // private fileService: FilesService,
+        @InjectModel(Profile) 
+            private profileRepository: typeof Profile,
+            private fileService: FilesService,
+        @InjectModel(User) 
+            private userRepository: typeof User,
+            private authService: AuthService,
+            private roleService: RolesService,
                         ) {}
 
     async createUser(dto: CreateProfileDto, image: any) {
@@ -48,15 +42,15 @@ export class ProfileService {
         return users;
     }
 
+    async getOneUsersById(id: number) { 
+        const users = await this.userRepository.findOne({where: {id}, include: {all: true}});
+        return users;
+    }
+
     async getAllUsers() { 
         const users = await this.userRepository.findAll({include: {all: true}});
         return users;
     } 
-
-    // async getUserByEmail(email: string) {
-    //     const user = await this.userRepository.findOne({where: {email}, include: {all: true}});
-    //     return user;
-    // }
 
     async updateUser(id: number, editDto: CreateProfileDto) {
         console.log(editDto)

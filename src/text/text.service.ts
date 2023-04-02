@@ -1,8 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Files } from 'src/files/files.model';
 import { FilesService } from 'src/files/files.service';
-import { locales } from 'validator/lib/isIBAN';
 import { CreateTextDto } from './dto/create-text.dto';
 import { Text } from './text.model'; 
 
@@ -21,9 +19,7 @@ export class TextService {
     }
 
     // Создание текстового блока
-    async create(req: any, dto: CreateTextDto, image: any) {
-        // Из обертки @UseGuards получаем req, из которого извлекаем id автора текстового сообщения
-        // const id = req.user.id;
+    async create(dto: CreateTextDto, image: any) {
         const candidate = await this.getTextByUniqTitle(dto.uniq_title);
         // Проверка уникальности названия
         if(candidate) {
@@ -69,19 +65,21 @@ export class TextService {
         return text;
     }
     
-    // Получение текста по уникальному названию
+    // Получение текста по уникальному названию 
     async getTextName(uniq_title: string) {
         const text = await this.textRepository.findOne({where: {uniq_title}, include: {all: true}});
-        const files = await this.fileService.getFile(text.id, text.essenceTable);
-        return [text, files];
+        return text;
     }
 
-    // Получение текста по уникальному названию
+    // Получение текста по НАЗВАНИЮ ГРУППЫ
+    async getTextGrup(grup: string) {
+        const text = await this.textRepository.findAll({where: {grup}, include: {all: true}});
+        return text;
+    }
+
+    // Получение всех текстовых блоков
     async getAllText() {
         const text = await this.textRepository.findAll();
-        // const files = await this.fileService.getFile(text.id, text.essenceTable);
-        // console.log(files)
-        // text.essenceTable = [file.image];
         return text;
     }
 

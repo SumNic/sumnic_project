@@ -1,4 +1,6 @@
+import { ApiProperty } from "@nestjs/swagger";
+
 export class CreateFileDto {
-    // readonly essenceTable: string;
+    @ApiProperty({example: 'image.jpg', description: 'Название файла'})
     readonly image: string;
 }

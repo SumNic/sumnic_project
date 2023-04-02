@@ -3,7 +3,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs'; 
-import { ProfileService } from 'src/profile/profile.service';
 import { User } from './auth.model';
 
 @Injectable()
@@ -11,8 +10,6 @@ export class AuthService {
 
     constructor(
         @InjectModel(User) private userRepository: typeof User,
-        // private authService: AuthService,
-        // private profileService: ProfileService,
         private jwtService: JwtService) {}
 
     async login(userDto: CreateUserDto) {
@@ -21,7 +18,6 @@ export class AuthService {
     }
 
     async registration(dto: CreateUserDto) {
-
         const candidate = await this.getUserByEmail(dto.email);
         if(candidate) {
             throw new HttpException('Пользователь с таким email существует', HttpStatus.BAD_REQUEST)
